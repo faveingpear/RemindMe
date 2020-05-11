@@ -1,37 +1,26 @@
 [
     {
-        "reminder": "Mothers Day! Now what happenes if I make this super long?", 
-        "year": "2020", 
-        "catagory": "Holiday", 
-        "day": "10", 
-        "month": "05"
-    }, 
-    {
-        "reminder": "Mothers Day!", 
-        "year": "2021", 
-        "catagory": "Holiday", 
-        "day": "10", 
-        "month": "05"
-    }, 
-    {
-        "reminder": "Mothers Day!", 
-        "year": "2020", 
-        "catagory": "Holiday", 
-        "day": "10", 
-        "month": "05"
-    }, 
-    {
-        "reminder": "Mothers Day!", 
-        "year": "2020", 
-        "catagory": "Holiday", 
-        "day": "10", 
-        "month": "05"
-    }, 
-    {
-        "reminder": "Take the trash out!", 
-        "year": "2020", 
-        "catagory": "Chores", 
         "day": "06", 
-        "month": "05"
+        "catagory": "math", 
+        "year": "2020", 
+        "reminder": "Testing new edit function", 
+        "month": "05", 
+        "id": 5153
+    }, 
+    {
+        "month": "05", 
+        "catagory": "this", 
+        "year": "2021", 
+        "reminder": "This is a new place", 
+        "id": 9130, 
+        "day": "06"
+    }, 
+    {
+        "month": "221", 
+        "catagory": "new test", 
+        "year": "1", 
+        "reminder": "New Note edit", 
+        "id": 3963, 
+        "day": "21"
     }
 ]

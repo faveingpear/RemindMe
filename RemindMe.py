@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import logging
+import random
 
 from config import json_loader
 
@@ -72,7 +73,6 @@ class ReminderEdit(QMainWindow):
 
         self.catagoryLabel = QLabel("Catagory")
         self.catagoryEdit = QLineEdit()
-        #self.catagoryNewButton = QPushButton("new")
 
         self.autoRemoveButton = QRadioButton("Auto remove when date passed")
 
@@ -81,23 +81,21 @@ class ReminderEdit(QMainWindow):
 
         self.form = QFormLayout()
 
-        #self.firstForm = QVBoxLayout()
-        #self.firstForm.addWidget(self.reminderLabel)
-        #self.firstForm.addWidget(self.reminderEdit)
-        #self.firstForm.addStretch()
-
         self.form.addRow(self.reminderLabel,self.reminderEdit)
         self.form.addRow(self.dateLabel,self.dateEdit)
-        # self.inner = QHBoxLayout()
-        # self.inner.addWidget(self.catagoryEdit)
-        # self.inner.addWidget(self.catagoryNewButton)
-        self.form.addRow(self.catagoryLabel,self.catagoryEdit)#self.inner)
+        
+        self.form.addRow(self.catagoryLabel,self.catagoryEdit)
         self.form.addRow(self.autoRemoveButton)
         self.form.addRow(self.saveButton)
 
         self.parent.setFixedSize(300,300)
         self.setGeometry(100,100,300,300)
         self.parent.setLayout(self.form)
+
+        if self.reminder !=None:
+            self.reminderEdit.setText(self.reminder.getReminder())
+            self.dateEdit.setText(self.reminder.getDate())
+            self.catagoryEdit.setText(self.reminder.getCatagory())
 
         self.show()
 
@@ -117,7 +115,8 @@ class ReminderEdit(QMainWindow):
                 "year":newdate[2],
                 "catagory":self.catagoryEdit.text(),
                 "day":newdate[0],
-                "month":newdate[1]
+                "month":newdate[1],
+                "id":random.randint(0,10000)
             }
 
             reminderData.append(newreminder)
@@ -132,17 +131,50 @@ class ReminderEdit(QMainWindow):
 
             self.close()
         else:
-            pass
+            file = open(REMINDER_PATH, "r")
+
+            reminderData = json.load(file)
+
+            file.close()
+
+            count = 0
+            for reminder in reminderData:
+                if reminder["id"] == self.reminder.getid():
+
+                    newdate = self.dateEdit.text().split("/")
+
+                    newreminder = {
+                        "reminder":self.reminderEdit.text(),
+                        "year":newdate[2],
+                        "catagory":self.catagoryEdit.text(),
+                        "day":newdate[0],
+                        "month":newdate[1],
+                        "id":self.reminder.getid()
+                    }
+                    reminderData[count] = newreminder
+
+                    file = open(REMINDER_PATH,"w")
+
+                    json.dump(reminderData,file,ensure_ascii = False, indent=4)
+
+                    file.close()
+
+                    self.close()
+            
+                count = count + 1
+        
 
 
 class Reminder():
 
-    def __init__(self, day=0,month=0,year=0,reminder="",catagory=""):
+    def __init__(self,parent,day=0,month=0,year=0,reminder="",catagory="",reminderid=0):
         self.day = day
         self.month = month
         self.year = year
         self.reminder = reminder
         self.catagory = catagory
+        self.parent = parent
+        self.reminderid = reminderid
 
     def findDaysUntil(self,currentDay,currentMonth,currentYear):
         pass
@@ -157,8 +189,11 @@ class Reminder():
     def getCatagory(self):
         return self.catagory
 
+    def getid(self):
+        return self.reminderid
+
     def edit(self):
-        pass
+        ReminderEdit(self.parent,self)
 
     def addSelfToViewAll(self,parent):
 
@@ -244,14 +279,6 @@ class RemindMe(QMainWindow):
 
     def setupConfig(self):
 
-        self.reminderConfigOption = [
-            "reminder",
-            "year",
-            "catagory",
-            "day",
-            "month"
-        ]
-
         file = open(REMINDER_PATH, "r")
 
         reminderData = json.load(file)
@@ -259,10 +286,7 @@ class RemindMe(QMainWindow):
         file.close()
 
         for reminder in reminderData:
-            self.reminderList.append(Reminder(reminder[self.reminderConfigOption[0]],reminder[self.reminderConfigOption[1]],reminder[self.reminderConfigOption[2]],reminder[self.reminderConfigOption[3]],reminder[self.reminderConfigOption[4]]))
-
-        print(self.reminderList[0].getCatagory())
-        print(self.reminderList[1].getCatagory())
+            self.reminderList.append(Reminder(self,reminder["day"],reminder["month"],reminder["year"],reminder["reminder"],reminder["catagory"],reminder["id"]))
 
     def viewAll(self):
         self.viewAllScreen = ReminderScreen(self,self.reminderList)
