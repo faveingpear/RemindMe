@@ -1,30 +1,37 @@
 [
     {
-        "day": "10",
-        "month": "05",
-        "year": "2020",
-        "reminder":"Mothers Day! Now what happenes if I make this super long?",
-        "catagory":"Holiday"
-    },
+        "reminder": "Mothers Day! Now what happenes if I make this super long?", 
+        "year": "2020", 
+        "catagory": "Holiday", 
+        "day": "10", 
+        "month": "05"
+    }, 
     {
-        "day": "10",
-        "month": "05",
-        "year": "2021",
-        "reminder":"Mothers Day!",
-        "catagory":"Holiday"
-    },
+        "reminder": "Mothers Day!", 
+        "year": "2021", 
+        "catagory": "Holiday", 
+        "day": "10", 
+        "month": "05"
+    }, 
     {
-        "day": "10",
-        "month": "05",
-        "year": "2020",
-        "reminder":"Mothers Day!",
-        "catagory":"Holiday"
-    },
+        "reminder": "Mothers Day!", 
+        "year": "2020", 
+        "catagory": "Holiday", 
+        "day": "10", 
+        "month": "05"
+    }, 
     {
-        "day": "10",
-        "month": "05",
-        "year": "2020",
-        "reminder":"Mothers Day!",
-        "catagory":"Holiday"
+        "reminder": "Mothers Day!", 
+        "year": "2020", 
+        "catagory": "Holiday", 
+        "day": "10", 
+        "month": "05"
+    }, 
+    {
+        "reminder": "Take the trash out!", 
+        "year": "2020", 
+        "catagory": "Chores", 
+        "day": "06", 
+        "month": "05"
     }
 ]

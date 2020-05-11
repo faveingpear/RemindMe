@@ -6,7 +6,7 @@ import logging
 
 from config import json_loader
 
-from PyQt5.QtWidgets import QMainWindow, QAction, QLabel, QWidget, QLineEdit, QComboBox, QPushButton, QCheckBox, QApplication, QMessageBox, QScrollArea, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QAction, QLabel, QWidget, QLineEdit, QComboBox, QPushButton, QCheckBox, QApplication, QMessageBox, QScrollArea, QVBoxLayout, QFormLayout, QHBoxLayout, QRadioButton
 from PyQt5.QtCore import Qt, QTimer, QProcess
 from PyQt5.QtGui import QIcon, QPixmap
 
@@ -51,6 +51,89 @@ class ReminderScreen(QMainWindow):
         self.setGeometry(100,100,350,400)
 
         self.show()
+
+class ReminderEdit(QMainWindow):
+
+    def __init__(self, parent, reminder=None):
+        super(ReminderEdit, self).__init__(parent)
+
+        self.reminder = reminder
+
+        self.initui()
+
+    def initui(self):
+        self.parent = QWidget(self)
+
+        self.reminderLabel = QLabel("Reminder")
+        self.reminderEdit = QLineEdit()
+
+        self.dateLabel = QLabel("Date")
+        self.dateEdit = QLineEdit()
+
+        self.catagoryLabel = QLabel("Catagory")
+        self.catagoryEdit = QLineEdit()
+        #self.catagoryNewButton = QPushButton("new")
+
+        self.autoRemoveButton = QRadioButton("Auto remove when date passed")
+
+        self.saveButton = QPushButton("Save")
+        self.saveButton.clicked.connect(self.save)
+
+        self.form = QFormLayout()
+
+        #self.firstForm = QVBoxLayout()
+        #self.firstForm.addWidget(self.reminderLabel)
+        #self.firstForm.addWidget(self.reminderEdit)
+        #self.firstForm.addStretch()
+
+        self.form.addRow(self.reminderLabel,self.reminderEdit)
+        self.form.addRow(self.dateLabel,self.dateEdit)
+        # self.inner = QHBoxLayout()
+        # self.inner.addWidget(self.catagoryEdit)
+        # self.inner.addWidget(self.catagoryNewButton)
+        self.form.addRow(self.catagoryLabel,self.catagoryEdit)#self.inner)
+        self.form.addRow(self.autoRemoveButton)
+        self.form.addRow(self.saveButton)
+
+        self.parent.setFixedSize(300,300)
+        self.setGeometry(100,100,300,300)
+        self.parent.setLayout(self.form)
+
+        self.show()
+
+    def save(self):
+
+        if self.reminder == None:
+            file = open(REMINDER_PATH, "r")
+
+            reminderData = json.load(file)
+
+            file.close()
+
+            newdate = self.dateEdit.text().split("/")
+
+            newreminder = {
+                "reminder":self.reminderEdit.text(),
+                "year":newdate[2],
+                "catagory":self.catagoryEdit.text(),
+                "day":newdate[0],
+                "month":newdate[1]
+            }
+
+            reminderData.append(newreminder)
+
+            print(reminderData)
+
+            file = open(REMINDER_PATH,"w")
+
+            json.dump(reminderData,file,ensure_ascii = False, indent=4)
+
+            file.close()
+
+            self.close()
+        else:
+            pass
+
 
 class Reminder():
 
@@ -157,16 +240,16 @@ class RemindMe(QMainWindow):
         self.show()
 
     def newReminder(self):
-        pass
+        newEdit = ReminderEdit(self)
 
     def setupConfig(self):
 
         self.reminderConfigOption = [
-            "day",
-            "month",
-            "year",
             "reminder",
-            "catagory"
+            "year",
+            "catagory",
+            "day",
+            "month"
         ]
 
         file = open(REMINDER_PATH, "r")
